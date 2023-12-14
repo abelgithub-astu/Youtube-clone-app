@@ -12,29 +12,36 @@ const VideoDetails = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    async function fetching() {
-      await fetchFromAPI(`videos?part=snippet,statistics&id=${id}`).then(
-        (data) => setVideoDetail(data.items[0])
-      );
+    const fetching = async (id) => {
+      await fetchFromAPI(`videos?part=snippet,statistics&id=${id}`)
+        .then((data) => setVideoDetail(data.items[0]))
+        .catch((error) => {
+          console.error("Error fetching data from the first URL:", error);
+        });
 
       await fetchFromAPI(
         `search?part=snippet&relatedToVideoId=${id}&type=video`
-      ).then((data) => setVideos(data.items));
-    }
-    fetching();
+      )
+        .then((data) => setVideos(data.items))
+        .catch((error) => {
+          console.error("Error fetching data from the first URL:", error);
+        });
+    };
+    fetching(id);
     if (videoDetail) {
-      console.log(videoDetail);
+      console.log("videoDetail");
     }
     if (videos) {
-      console.log(videos);
+      console.log("videos");
     }
   }, [id]);
-  const {
+  console.log("id", id);
+  /* const {
     snippet: { title, channelId, channelTitle },
     statistics: { viewCount, likeCount },
-  } = videoDetail;
+  } = videoDetail; */
 
-  if (!videoDetail?.snippet) return "Loading...";
+  /* if (!videoDetail?.snippet || !videoDetail || !videos) return "Loading..."; */
 
   return (
     <Box minHeight="95vh">
@@ -47,7 +54,7 @@ const VideoDetails = () => {
               url={`https://www.youtube.com/watch?v=${id}`}
             />
             <Typography color={"#fff"} variant="h5" p={2} fontWeight={"bold"}>
-              {title}
+              {"" /* title */}
             </Typography>
             <Stack
               direction={"row"}
@@ -56,11 +63,11 @@ const VideoDetails = () => {
               py={1}
               px={2}
             >
-              <Link to={`/channel/${channelId} `}>
+              <Link to={`/channel/${/* channelId */ ""} `}>
                 <Typography
                   variant={{ sm: "subtitle1", md: "h6", color: "#fff" }}
                 >
-                  {channelTitle}
+                  {"" /* channelTitle */}
                   <CheckCircle
                     sx={{ fontSize: "12px", color: "gray", ml: "5px" }}
                   />
@@ -68,10 +75,10 @@ const VideoDetails = () => {
               </Link>
               <Stack direction={"row"} gap={"20px"} alignItems={"center"}>
                 <Typography variant="body1" sx={{ opacity: 0.7 }}>
-                  {parseInt(viewCount).toLocaleString()} views
+                  {/*  {parseInt(viewCount).toLocaleString()} */} views
                 </Typography>
                 <Typography variant="body1" sx={{ opacity: 0.7 }}>
-                  {parseInt(likeCount).toLocaleString()} likes
+                  {/* {parseInt(likeCount).toLocaleString()} */} likes
                 </Typography>
               </Stack>
             </Stack>
@@ -83,7 +90,7 @@ const VideoDetails = () => {
           justifyContent="center"
           alignItems="center"
         >
-          <Videos videos={videos} direction="column" />
+          {/* <Videos videos={videos} direction="column" /> */}
         </Box>
       </Stack>
     </Box>
